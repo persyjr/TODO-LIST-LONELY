@@ -1,19 +1,46 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useState } from "react";
+//importando componentes
+import List from "./list.jsx";
 
 //create your first component
 const Home = () => {
+	//defino e incializo el arreglo items y permito manipular su estado
+	const [items, setitems] = useState([
+		"Inspección de recibo",
+		"lista de chequeo",
+		"limpieza general",
+	]);
+	function addItem(e) {
+		e.preventDefault(); //e.preventDefault() me impide que se recargue la pagina (e) evento
+		//se crea un objeto form.Data con los datos del formulario
+		let Data = new FormData(e.target); //estoy crendo una instancia temporal llamada formData (data del formulario) (e.target)me permite tomar la info del input
+		//Se obtiene el nuevo item del formulario (e.data)=(document.querySelector(#id_del_form))
+		//especifico el elemento al cual le obtengo la info
+		let newItem = Data.get("newItem");
+		//Se establece el estado del items  al mismo arreglo con el nuevo elemento al final
+		setitems([...items, newItem]); //estoy cambiando el estado de mi arreglo  directamente desde el imput. 1 genero un nuevo arreglo con setitems,2. deconstruyo conservando arreglo anterior (...items)
+		//reinicia el formulario
+		e.target.reset();
+	} //3. agrego un nuevo valor directamente desde mi input
+
 	return (
 		<div>
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
+			<h1 className="text-center mt-5">TODO LIST</h1>
+			<form className="form-group" onSubmit={addItem}>
+				<label htmlFor="newItem"></label>
+				<input
+					required
+					id="newItem"
+					className="form-control"
+					placeholder="Porfavor ingrese una nueva Tarea"
+					type="text"
+					name="newItem"></input>
+				{/*<button type="submit">ADD TO LIST</button>*/}
+			</form>
+			<div className="form-group">
+				<List itemsForm={items} />
+				{/*itemsForm es la prop que me permite enlazar el contenido de la lista para que sea devuelto en el componente List */}
+			</div>
 			<p>
 				Made by{" "}
 				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
