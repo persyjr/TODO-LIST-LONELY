@@ -23,10 +23,10 @@ const Home = () => {
 	return (
 		<div>
 			<div className="card border-secondary mb-3">
-				<div className="card-header">Todo List 4Geeks</div>
+				<div className="card-header">Example</div>
 				<div className="card-body">
 					<h5 className="card-title">
-						<h1 className="text-center mt-5">TODO LIST</h1>
+						<h1 className="text-center mt-5">todo</h1>
 						<form className="form-group" onSubmit={addItem}>
 							<label htmlFor="newItem"></label>
 							<input
