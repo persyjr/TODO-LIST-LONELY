@@ -1,15 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 //importando componentes
 import List from "./list.jsx";
 
 //create your first component
 const Home = () => {
-	//defino e incializo el arreglo items y permito manipular su estado
-	const [items, setitems] = useState([
-		"Inspección de recibo",
-		"lista de chequeo",
-		"limpieza general",
-	]);
 	function addItem(e) {
 		e.preventDefault(); //e.preventDefault() me impide que se recargue la pagina (e) evento
 		//se crea un objeto form.Data con los datos del formulario
@@ -25,27 +19,34 @@ const Home = () => {
 
 	return (
 		<div>
-			<h1 className="text-center mt-5">TODO LIST</h1>
-			<form className="form-group" onSubmit={addItem}>
-				<label htmlFor="newItem"></label>
-				<input
-					required
-					id="newItem"
-					className="form-control"
-					placeholder="Porfavor ingrese una nueva Tarea"
-					type="text"
-					name="newItem"></input>
-				{/*<button type="submit">ADD TO LIST</button>*/}
-			</form>
-			<div className="form-group">
-				<List itemsForm={items} />
-				{/*itemsForm es la prop que me permite enlazar el contenido de la lista para que sea devuelto en el componente List */}
+			<div className="card border-secondary mb-3">
+				<div className="card-header">Todo List 4Geeks</div>
+				<div className="card-body">
+					<h5 className="card-title">
+						<h1 className="text-center mt-5">TODO LIST</h1>
+						<form className="form-group" onSubmit={addItem}>
+							<label htmlFor="newItem"></label>
+							<input
+								required
+								id="newItem"
+								className="form-control"
+								placeholder="Porfavor ingrese una nueva Tarea"
+								type="text"
+								name="newItem"></input>
+							{/*<button type="submit">ADD TO LIST</button>*/}
+						</form>
+					</h5>
+				</div>
+				<div className="form-group">
+					<List />
+					{/*itemsForm es la prop que me permite enlazar el contenido de la lista para que sea devuelto en el componente List */}
+				</div>
+				<p>
+					Made by{" "}
+					<a href="http://www.4geeksacademy.com">4Geeks Academy</a>,
+					with love!
+				</p>
 			</div>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
 		</div>
 	);
 };
