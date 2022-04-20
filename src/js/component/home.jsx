@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 //importando componentes
 import List from "./list.jsx";
 
 //create your first component
 const Home = () => {
+	const listRef = useRef();
 	function addItem(e) {
 		e.preventDefault(); //e.preventDefault() me impide que se recargue la pagina (e) evento
 		//se crea un objeto form.Data con los datos del formulario
@@ -12,7 +13,9 @@ const Home = () => {
 		//especifico el elemento al cual le obtengo la info
 		let newItem = Data.get("newItem");
 		//Se establece el estado del items  al mismo arreglo con el nuevo elemento al final
-		setitems([...items, newItem]); //estoy cambiando el estado de mi arreglo  directamente desde el imput. 1 genero un nuevo arreglo con setitems,2. deconstruyo conservando arreglo anterior (...items)
+		//se obtiene el nuevo item del formulario
+		listRef.current.newItem(newItem);
+
 		//reinicia el formulario
 		e.target.reset();
 	} //3. agrego un nuevo valor directamente desde mi input
@@ -38,12 +41,11 @@ const Home = () => {
 					</h5>
 				</div>
 				<div className="form-group">
-					<List />
+					<List ref={listRef} />
 					{/*itemsForm es la prop que me permite enlazar el contenido de la lista para que sea devuelto en el componente List */}
 				</div>
 				<p>
-					Made by{" "}
-					<a href="http://www.4geeksacademy.com">4Geeks Academy</a>,
+					Made by <a href="https://github.com/persyjr">persyjr</a>,
 					with love!
 				</p>
 			</div>
