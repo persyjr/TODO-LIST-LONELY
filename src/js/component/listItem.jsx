@@ -6,9 +6,16 @@ const ListItem = (props) => {
 	}
 	console.log(props.itemId);
 	return (
-		<li onClick={click} className="list-group-item list-group-item-action">
-			{props.textItem}
-		</li>
+		<div className="container-fluid">
+			<div className=" row ">
+				<div
+					onClick={click}
+					className="col list-group-item  list-group-item-action ">
+					{props.textItem}
+				</div>
+				<div className=" list-group-item  divcerrar ">x</div>
+			</div>
+		</div>
 	);
 };
 export default ListItem;

@@ -1,4 +1,10 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, {
+	useState,
+	forwardRef,
+	useImperativeHandle,
+	useEffect,
+} from "react";
+import { cargarlista, actualizarlista } from "../lista.js";
 import ListItem from "./listItem.jsx";
 
 //defino e incializo el arreglo items y permito manipular su estado
@@ -14,25 +20,36 @@ const List = forwardRef((props, ref) => {
 		"lista de chequeo",
 		"limpieza general",
 	]);
+
 	useImperativeHandle(ref, () => ({
 		newItem: (itemtext) => {
-			setitems([...items, itemtext]);
+			const newArray = [...items, { label: itemtext, done: false }];
+			actualizarlista(props.username, newArray).then((ok) => {
+				if (ok) setitems(newArray);
+			});
+			setitems(newArray);
 		}, //componente items puede usar metodos de otro componente desde el componente padre home
 	}));
+
+	cargarlista(props.username).then((data) => setitems(data));
 
 	function deleteItem(id) {
 		console.log("eliminando el " + id);
 		let itemsTemp = [...items];
 		itemsTemp.splice(id, 1);
-		setitems(itemsTemp);
+		//actualizar la api //actualizo en mi API
+		//const actualizada = actualizarlista("Adelmo", itemsTemp);
+		actualizarlista(props.username, itemsTemp).then((actualizada) => {
+			if (actualizada) setitems(itemsTemp);
+		});
 	}
 	return (
 		<ul className="list-group">
 			{items.map(
-				(itemMap, id) => (
+				(item, id) => (
 					//itemsForm es la propiedad de mi componenete list y contiene las tareas
 					<ListItem
-						textItem={itemMap}
+						textItem={item.label}
 						key={id}
 						itemId={id}
 						delete={deleteItem}></ListItem>
