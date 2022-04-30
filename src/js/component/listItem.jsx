@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
 const ListItem = (props) => {
 	function click() {
 		props.delete(props.itemId);
 	}
-	console.log(props.itemId);
+
+	//console.log(props.itemId);
 	return (
 		<div className="container-fluid">
 			<div className=" row ">

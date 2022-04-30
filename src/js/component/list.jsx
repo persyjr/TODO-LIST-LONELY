@@ -1,9 +1,4 @@
-import React, {
-	useState,
-	forwardRef,
-	useImperativeHandle,
-	useEffect,
-} from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { cargarlista, actualizarlista } from "../lista.js";
 import ListItem from "./listItem.jsx";
 
@@ -43,6 +38,10 @@ const List = forwardRef((props, ref) => {
 			if (actualizada) setitems(itemsTemp);
 		});
 	}
+	let itemsTtotal = [...items];
+	let totalitems = itemsTtotal.length;
+	console.log(totalitems);
+
 	return (
 		<ul className="list-group">
 			{items.map(
@@ -55,6 +54,7 @@ const List = forwardRef((props, ref) => {
 						delete={deleteItem}></ListItem>
 				) //itemMap argumento de entrada .map item variable con estado
 			)}
+			{totalitems} item left
 		</ul>
 	);
 });

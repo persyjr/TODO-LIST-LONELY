@@ -21,6 +21,7 @@ const Home = () => {
 			let newItem = Data.get("newItem");
 			//Se establece el estado del items  al mismo arreglo con el nuevo elemento al final
 			//se obtiene el nuevo item del formulario
+			listRef.current.newItem(newItem);
 		} else {
 			//si no hay un usuario, valida la entrada con nombre de usuario
 			let username = Data.get("username");
@@ -93,9 +94,7 @@ const Home = () => {
 					)}
 				</div>
 				<div className="card-footer text-muted">
-					<a href="http://www.4geeksacademy.com">
-						4Geeks Academy {3}
-					</a>
+					<a href="http://www.4geeksacademy.com">4Geeks Academy</a>
 				</div>
 			</div>
 		</div>
