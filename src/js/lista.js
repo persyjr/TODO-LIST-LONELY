@@ -45,7 +45,19 @@ const crearlista = async (username) => {
 	let resp = await fetch(`${baseurl}${username}`, params);
 	return resp.ok;
 };
-
+// En lista.js
+const eliminarTarea = async (todoId) => {
+    try {
+        const resp = await fetch(`https://playground.4geeks.com/todo/todos/${todoId}`, {
+            method: "DELETE"
+        });
+        // Si el borrado fue exitoso, la API suele devolver un 204 (No Content)
+        return resp.ok;
+    } catch (error) {
+        console.error("Error al eliminar:", error);
+        return false;
+    }
+};
 const actualizarlista = async (username, lista) => {
 	let params = {
 		method: "PUT",
@@ -79,4 +91,4 @@ const eliminarlista = async (username) => {
 	return resp.ok;
 };
 
-export { crearTarea, cargarlista, crearlista, actualizarlista, eliminarlista };
+export { eliminarTarea,crearTarea, cargarlista, crearlista, actualizarlista, eliminarlista };

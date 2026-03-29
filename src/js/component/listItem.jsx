@@ -14,7 +14,7 @@ const ListItem = (props) => {
 					className="col list-group-item  list-group-item-action ">
 					{props.textItem}
 				</div>
-				<div className=" list-group-item  divcerrar ">x</div>
+				<div className=" list-group-item  divcerrar " >x</div>
 			</div>
 		</div>
 	);

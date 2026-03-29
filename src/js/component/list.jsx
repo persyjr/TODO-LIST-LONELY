@@ -1,5 +1,5 @@
 import React, {useEffect , useState, forwardRef, useImperativeHandle } from "react";
-import { crearTarea ,cargarlista, actualizarlista } from "../lista.js";
+import { eliminarTarea, crearTarea ,cargarlista, actualizarlista } from "../lista.js";
 import ListItem from "./listItem.jsx";
 
 //defino e incializo el arreglo items y permito manipular su estado
@@ -40,12 +40,17 @@ useImperativeHandle(ref, () => ({
     },
 }));
 
-    function deleteItem(id) {
-        const itemsTemp = items.filter((_, index) => index !== id);
-        actualizarlista(props.username, itemsTemp).then((ok) => {
-            if (ok) setitems(itemsTemp);
-        });
-    }
+function deleteItem(id) {
+	const itemsTemp = items.filter((_, index) => index !== id);
+	setitems(itemsTemp);
+	eliminarTarea(items[id].id).then((ok) => {
+		if (ok) {
+			console.log("Tarea eliminada");
+		} else {
+			console.log("No se pudo eliminar la tarea");
+		}
+	});
+}
 
     return (
         <ul className="list-group">
