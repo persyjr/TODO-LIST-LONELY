@@ -1,62 +1,65 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
-import { cargarlista, actualizarlista } from "../lista.js";
+import React, {useEffect , useState, forwardRef, useImperativeHandle } from "react";
+import { crearTarea ,cargarlista, actualizarlista } from "../lista.js";
 import ListItem from "./listItem.jsx";
 
 //defino e incializo el arreglo items y permito manipular su estado
 
 const List = forwardRef((props, ref) => {
-	//permite ceder el control de mi componente al dom
-	//metodo de control de componente para dar control en el dom, permite llamar un metodo del componente list
-	//este componente list tiene un metodo que puede ser llamado por el padre home los metodos que usare se declaran
-	//en el imperative handle en este caso es la funcion NEW ITEM (newItem)
-	//setitems([...items, newItem]); //estoy cambiando el estado de mi arreglo  directamente desde el imput. 1 genero un nuevo arreglo con setitems,2. deconstruyo conservando arreglo anterior (...items)
-	const [items, setitems] = useState([
-		"Inspección de recibo",
-		"lista de chequeo",
-		"limpieza general",
-	]);
+    // 1. Inicializa siempre con un array vacío o con la estructura correcta (objetos)
+    const [items, setitems] = useState([]);
 
-	useImperativeHandle(ref, () => ({
-		newItem: (itemtext) => {
-			const newArray = [...items, { label: itemtext, done: false }];
-			actualizarlista(props.username, newArray).then((ok) => {
-				if (ok) setitems(newArray);
-			});
-			setitems(newArray);
-		}, //componente items puede usar metodos de otro componente desde el componente padre home
-	}));
+    // 2. USA USEEFFECT para cargar la lista una sola vez
+    useEffect(() => {
+        if (props.username) {
+            cargarlista(props.username).then((data) => {
+                // Forzamos que sea un array para evitar el error de spread
+                setitems(Array.isArray(data) ? data : []);
+            });
+        }
+    }, [props.username]); // Solo se ejecuta cuando el username cambia
 
-	cargarlista(props.username).then((data) => setitems(data));
+    // Dentro de List.jsx, modifica el useImperativeHandle:
 
-	function deleteItem(id) {
-		console.log("eliminando el " + id);
-		let itemsTemp = [...items];
-		itemsTemp.splice(id, 1);
-		//actualizar la api //actualizo en mi API
-		//const actualizada = actualizarlista("Adelmo", itemsTemp);
-		actualizarlista(props.username, itemsTemp).then((actualizada) => {
-			if (actualizada) setitems(itemsTemp);
-		});
-	}
-	let itemsTtotal = [...items];
-	let totalitems = itemsTtotal.length;
-	console.log(totalitems);
+useImperativeHandle(ref, () => ({
+    newItem: (itemtext) => {
+        const nuevoObjeto = { 
+            label: itemtext, 
+            is_done: false 
+        };
 
-	return (
-		<ul className="list-group">
-			{items.map(
-				(item, id) => (
-					//itemsForm es la propiedad de mi componenete list y contiene las tareas
-					<ListItem
-						textItem={item.label}
-						key={id}
-						itemId={id}
-						delete={deleteItem}></ListItem>
-				) //itemMap argumento de entrada .map item variable con estado
-			)}
-			{totalitems} item left
-		</ul>
-	);
+        // 1. Llamamos a la API para crear una SOLA tarea
+        crearTarea(props.username, nuevoObjeto).then((tareaCreada) => {
+            if (tareaCreada) {
+                // 2. Si la API la creó, la añadimos al estado local
+                // 'tareaCreada' ya trae el ID que le asignó el servidor
+                setitems(prevItems => [...prevItems, tareaCreada]);
+            } else {
+                console.error("No se pudo crear la tarea en el servidor");
+            }
+        });
+    },
+}));
+
+    function deleteItem(id) {
+        const itemsTemp = items.filter((_, index) => index !== id);
+        actualizarlista(props.username, itemsTemp).then((ok) => {
+            if (ok) setitems(itemsTemp);
+        });
+    }
+
+    return (
+        <ul className="list-group">
+            {/* Validamos que items sea iterable antes de hacer map */}
+            {Array.isArray(items) && items.map((item, id) => (
+                <ListItem
+                    textItem={item.label} // Ahora item siempre será un objeto {label: ...}
+                    key={id}
+                    itemId={id}
+                    delete={deleteItem}
+                />
+            ))}
+            <li className="list-group-item">{items.length} items left</li>
+        </ul>
+    );
 });
-
 export default List;

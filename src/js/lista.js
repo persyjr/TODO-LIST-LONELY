@@ -1,16 +1,39 @@
-const baseurl = "https://assets.breatheco.de/apis/fake/todos/user/";
-//               https://assets.breatheco.de/apis/fake/todos/user/
+const baseurl = "https://playground.4geeks.com/todo/users/";
+//               http://assets.breatheco.de/apis/fake/todos/user/
 
 const cargarlista = async (username) => {
-	/*;let resp = await (`${baseurl}${username}`);
-	let data = await resp.json();
-	return data;*/
-	let resp = await fetch(`${baseurl}${username}`); //await me permite esperar de manera asincrona la respuesta del fetch
-	//FETCH ES una funcion asincrona por tanto lo que escriba mientras se resuelve la promes se va a ejecutar, como un codigo en el lugar de este comentario se declara asincrona para usar el await
-	if (resp.ok) return await resp.json();
-	return [];
-};
+    try {
+        let resp = await fetch(`${baseurl}${username}`);
+        if (resp.ok) {
+            const data = await resp.json();
+            // La API de 4Geeks devuelve un objeto con una propiedad 'todos' que es el array
+            return data.todos || data; 
+        }
+        return [];
+    } catch (error) {
+        return [];
+    }
+}; 
 
+const crearTarea = async (username, tareaObj) => {
+    try {
+		const url = `https://playground.4geeks.com/todo/todos/${username}`;
+        const resp = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(tareaObj),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (resp.ok) {
+            return await resp.json(); // La API te devuelve la tarea con su nuevo ID
+        }
+        return null;
+    } catch (error) {
+        console.error("Error al crear tarea:", error);
+        return null;
+    }
+};
 const crearlista = async (username) => {
 	let params = {
 		method: "POST",
@@ -31,8 +54,19 @@ const actualizarlista = async (username, lista) => {
 			"Content-Type": "application/json",
 		},
 	};
-	let resp = await fetch(`${baseurl}${username}`, params);
-	return resp.ok;
+	try{
+
+		let resp = await fetch(`${baseurl}${username}`, params);
+		if (!resp.ok) {
+            // Esto te dirá exactamente qué campo está mal (ej: "label is required")
+            const errorData = await resp.json();
+            console.log("Respuesta de error del servidor:", errorData);
+        }
+		return resp.ok;
+	}catch(error){
+		console.log(error);
+		return false;
+	}
 };
 const eliminarlista = async (username) => {
 	let params = {
@@ -45,4 +79,4 @@ const eliminarlista = async (username) => {
 	return resp.ok;
 };
 
-export { cargarlista, crearlista, actualizarlista, eliminarlista };
+export { crearTarea, cargarlista, crearlista, actualizarlista, eliminarlista };

@@ -22,6 +22,7 @@ const Home = () => {
 			//Se establece el estado del items  al mismo arreglo con el nuevo elemento al final
 			//se obtiene el nuevo item del formulario
 			listRef.current.newItem(newItem);
+			
 		} else {
 			//si no hay un usuario, valida la entrada con nombre de usuario
 			let username = Data.get("username");
