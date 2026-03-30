@@ -4,10 +4,10 @@ const baseurl = "https://playground.4geeks.com/todo/users/";
 const cargarlista = async (username) => {
     try {
         let resp = await fetch(`${baseurl}${username}`);
-        if (resp.ok) {
+        if (resp.ok ) {
             const data = await resp.json();
             // La API de 4Geeks devuelve un objeto con una propiedad 'todos' que es el array
-            return data.todos || data; 
+            return  data; 
         }
         return [];
     } catch (error) {

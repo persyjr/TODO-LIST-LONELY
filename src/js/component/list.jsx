@@ -13,7 +13,7 @@ const List = forwardRef((props, ref) => {
         if (props.username) {
             cargarlista(props.username).then((data) => {
                 // Forzamos que sea un array para evitar el error de spread
-                setitems(Array.isArray(data) ? data : []);
+                setitems(Array.isArray(data.todos) ? data.todos : []);
             });
         }
     }, [props.username]); // Solo se ejecuta cuando el username cambia
@@ -25,6 +25,7 @@ useImperativeHandle(ref, () => ({
         const nuevoObjeto = { 
             label: itemtext, 
             is_done: false 
+            
         };
 
         // 1. Llamamos a la API para crear una SOLA tarea
